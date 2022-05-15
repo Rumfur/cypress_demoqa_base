@@ -4,6 +4,7 @@ import RadioButtonsPage from "../../pageObjects/RadioButtonsPage";
 import WebTablesPage from "../../pageObjects/WebTablesPage";
 import ButtonsPage from "../../pageObjects/ButtonsPage";
 import LinksPage from "../../pageObjects/LinkPage";
+import SelectablePage from "../../pageObjects/SelectablePage";
 
 context("Elements Page", () => {
   context("Text box scenarios", () => {
@@ -154,10 +155,91 @@ context("Elements Page", () => {
       LinksPage.visit();
     });
 
-    it.only("API intercepting", () => {
+    it("API intercepting", () => {
       //cy.intercept("GET", "created", { statusCode: 400 });
       LinksPage.createdLink.click();
       LinksPage.linkResponse.should("contain", "201");
+    });
+  });
+
+  context("Selectables scenarios", () => {
+    // HOMEWORK SCENARIOS
+    beforeEach(() => {
+      SelectablePage.visit();
+    });
+
+    it("List item clicking and validating", () => {
+      // SCENARIO 1
+      //Noklikot uz laukiem “Cras justo odio” un “Morbi leo risus”.
+      SelectablePage.getListItems.contains("Cras justo odio").click();
+      SelectablePage.getListItems.contains("Morbi leo risus").click();
+      //Novalidēt, ka noklikotie lauki ir aktīvi. (.invoke('class')).
+      SelectablePage.getListItems
+        .contains("Cras justo odio")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      SelectablePage.getListItems
+        .contains("Morbi leo risus")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      //Novalidēt, ka pārējie lauki nav mainījuši stāvokli.
+      SelectablePage.getListItems
+        .contains("Dapibus ac facilisis in")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+      SelectablePage.getListItems
+        .contains("Porta ac consectetur ac")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+    });
+
+    it.only("Grid item clicking and validating", () => {
+      // SCENARIO 2
+      //Atvērt sadaļu “Grid”.
+      SelectablePage.pressGridButton.click();
+      //Noklikot laukus “Two”, “Four”, “Six” un “Eight”.
+      SelectablePage.getListItems.contains("Two").click();
+      SelectablePage.getListItems.contains("Four").click();
+      SelectablePage.getListItems.contains("Six").click();
+      SelectablePage.getListItems.contains("Eight").click();
+      //Novalidēt, ka lauki “Two”, “Four”, “Six” un “Eight” ir aktīvi (.invoke('class')).
+      SelectablePage.getListItems
+        .contains("Two")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      SelectablePage.getListItems
+        .contains("Four")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      SelectablePage.getListItems
+        .contains("Six")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      SelectablePage.getListItems
+        .contains("Eight")
+        .invoke("attr", "class")
+        .should("contain", "active");
+      //Novalidēt, ka pārējie lauki nav mainījuši stāvokli.
+      SelectablePage.getListItems
+        .contains("One")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+      SelectablePage.getListItems
+        .contains("Three")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+      SelectablePage.getListItems
+        .contains("Five")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+      SelectablePage.getListItems
+        .contains("Seven")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
+      SelectablePage.getListItems
+        .contains("Nine")
+        .invoke("attr", "class")
+        .should("not.contain", "active");
     });
   });
 });
